@@ -1,7 +1,7 @@
 var app = require('app');  // Module to control application life.
 
 app.on('window-all-closed', function() {
-  if (process.platform != 'darwin' && app.active_windows.length == 0) {
+  if (process.platform != 'darwin' && app.WINDOWS.length == 0) {
     app.quit();
   }
 });
