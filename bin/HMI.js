@@ -12,7 +12,7 @@ const electron = require('electron');
   DATA
 */
 const IPCMain = electron.ipcMain;
-const CtrConfiguration = null;
+const CtrConfiguration = require(__dirname + '/CtrConfiguration.js');
 const CtrUser = require(__dirname + '/CtrUser.js');
 const CtrWindows = require(__dirname + '/CtrWindows.js');
 
@@ -24,7 +24,7 @@ IPCMain.on('synchronous-message', (event, args) => {
   var response = {code: 404,data: null};
 
   switch(event_target){
-    //case 'config': break;
+    case 'config': response = CtrConfiguration.event(args.event,args.data); break;
     case 'user': response = CtrUser.event(args.event,args.data); break;
     case 'window': response = CtrWindows.event(args.event,event.sender,args.data); break;
   }

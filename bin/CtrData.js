@@ -9,13 +9,14 @@
 /*
   Data
 */
-const ENCRYPTOR = 'SOME BINARY ENCRYPTOR';
+const ENCRYPTOR = 'KEY';
 
 /*
   Functions
 */
 module.exports.encryptData = (data) => {
-  return toBynari(data);
+  var result = toBynari(data);
+  return result;
 }
 
 module.exports.unencryptData = (data) => {
@@ -25,14 +26,13 @@ module.exports.unencryptData = (data) => {
 function toBynari(data){
   var encrypted_data = '';
   for(char of data){
-
     var byte = char.charCodeAt(0).toString(2);
     var normalized_byte = normalize_byte(byte);
     var encrypted_byte = encrypt_byte(normalized_byte);
     encrypted_data = encrypted_data + encrypted_byte;
   }
 
-  return encrypted_data
+  return encrypted_data;
 }
 
 function fromBynari(bynari){
