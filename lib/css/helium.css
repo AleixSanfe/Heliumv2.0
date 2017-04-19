@@ -1,5 +1,6 @@
 body{
 	overflow: hidden;
+	margin: 0px;
 }
 
 #header{
@@ -266,7 +267,7 @@ body{
 }
 
 .drawer-header{
-	background: linear-gradient( rgba(255, 255, 255, 0.6),rgba(255, 255, 255, 1)), url(''); 
+	background: linear-gradient( rgba(255, 255, 255, 0.6),rgba(255, 255, 255, 1)), url('');
 	background-repeat: no-repeat;
 	background-size: cover;
 	height: 150px;

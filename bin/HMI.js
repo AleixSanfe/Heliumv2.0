@@ -33,5 +33,5 @@ IPCMain.on('synchronous-message', (event, args) => {
 });
 
 module.exports.new_window = (name) => {
-  CtrWindows.event('window_new',null,{name: name});
+  CtrWindows.event('window_new',null,{name: name},true);
 }
