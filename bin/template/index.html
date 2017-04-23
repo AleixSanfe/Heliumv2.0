@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="../../lib/css/helium.css">
 </head>
-<body>
+<body id="foo">
   <div class="menu menu-half row" style="-webkit-app-region: drag;">
     <div class="col-xs-12 col-sm-2 col-sm-offset-10" style="height: 40px; line-height: 40px;">
       <div class="row" style="-webkit-app-region: no-drag;">
@@ -18,8 +18,13 @@
       </div>
     </div>
   </div>
-  <div class="view"></div>
+  <div id="view"></div>
 
 <script src="js/window.js"></script>
+<style>
+  body > #view{
+    height: inherit;
+  }
+</style>
 </body>
 </html>

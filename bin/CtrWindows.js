@@ -46,6 +46,7 @@ function create_window(name,main){
   nw.maximize();
   (main) ? nw.loadURL(__dirname + '/../extensions/'+name+'/index.html') : nw.loadURL(__dirname + '/template/index.html');
   nw.name = name;
+  nw.id = name;
   nw.openDevTools();
 
   nw.on('close',function(){ delete app.WINDOWS[name]; });

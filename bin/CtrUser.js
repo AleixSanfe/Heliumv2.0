@@ -8,6 +8,7 @@
 */
 const CtrData = require(__dirname + '/CtrData.js');
 const fs = require('fs');
+var app = require('app');
 
 /*
   DATA
@@ -31,9 +32,10 @@ module.exports.event = (e,data) => {
     case 'user_get_extension': response = get_logged_user_extension(data.extension); break; //exc: USER is  not null;
     case 'user_get_extensions': response = get_logged_user_extensions(); break; //exc: USER is  not null;
     case 'user_post_info': response = post_looged_user_info(data); break; //exc: USER is  not null;
-    case 'user_post_extension': response = post_looged_user_extension(); break; //exc: USER is  not null;
-    case 'user_post_extensions': response = post_looged_user_extensions(); break; //exc: USER is  not null;
-    default: return null;
+    case 'user_post_extension': response = post_looged_user_extension(data.id,data.action); break; //exc: USER is  not null;
+    case 'user_post_extensions': response = post_looged_user_extensions(data); break; //exc: USER is  not null;
+    case 'user_get_users': response = get_users(); break;
+    default: response = {code: 404, data: 'Token not found'};
   }
 
   response.event = e;
@@ -60,6 +62,7 @@ function get_user_info(user,out){
     response = ( (data) ? {code: 200, data: data} : {code: 404, data: 'User does not exist'} );
   }() : (response = {code: 404, data: 'User does not exist'});
 
+  (USER) ? '' : (USER = response.data);
   (out && response.code == 200) ? (delete response.data.info.password) : '';
   return response;
 }
@@ -161,4 +164,40 @@ function get_logged_user_extension(extension){
 function get_logged_user_extensions(){
   if(USER) return {code: 200,data: USER.extensions.extension};
   else return {code: 404,data: null};
+}
+
+function post_looged_user_extension(id,action){
+  var response = {code: 200, data: id};
+  (action) ? USER.extensions[id] = get_extension_info(id) :
+    function(){
+      (USER.extensions[id]) ? (delete USER.extensions[id]) : '';
+    }() ;
+
+  app.broadcast_message('extension_dis/enabled');
+
+  save();
+  return response;
+}
+
+function post_looged_user_extensions(extensions){
+  var response = {code: 200, data: extensions};
+  (USER && extensions) ? (USER.extensions = extensions,save()) : (response = {code: 404, data: 'No user logged'});
+  return response;
+}
+
+function save(){
+  var encrypted_user = CtrData.encryptData(JSON.stringify(USER));
+  var result = fs.writeFileSync(PATH + '/' + USER.id,encrypted_user);
+}
+
+function get_extension_info(id){
+  var extension_package = fs.readFileSync(__dirname + '/../extensions/'+id+'/package.json', 'utf8');
+  extension_package = JSON.parse( extension_package );
+
+  var info = {};
+  info.id = id;
+  (extension_package.name) ? (info.name = extension_package.name) : '';
+  (extension_package.type) ? (info.type = extension_package.type) : '';
+
+  return info;
 }
